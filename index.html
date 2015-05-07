@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>WebTec UE04 - hopps01</title>
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+      (function() {
+
+        function TableGen(zeilen, spalten,x){
+          this.table = document.createElement("table");
+          //this.table.setAttribute("id","table");
+          this.table.setAttribute("style","border:1px solid black;");
+
+          for(var i=zeilen; i>0;i--){
+            this.tr = document.createElement("tr");
+            this.tr.setAttribute("id","tr"+i+"-"+x)
+            this.tr.setAttribute("style", "border: 1px solid black; height:50px; width:150px;");
+
+            for(var b=spalten;b>0;b--){
+              this.td = document.createElement("td");
+              this.td.setAttribute("id","td"+i+"."+b+"-"+x);
+              this.td.setAttribute("style","border: 1px solid black; width:50px; height:50px;")
+              this.tr.appendChild(this.td);
+            }
+
+            this.table.appendChild(this.tr);
+          }
+          this.logTable       =     function(){
+                                      console.log(this.table);
+                                    }
+
+          this.addTable       =     function(){
+                                      //  console.log(this.table);
+                                      document.body.appendChild(this.table);
+                                    }
+
+          this.returnTable    =     function(){
+                                      //console.log(this.table);
+                                      return(this.table);
+                                    }
+          this.setInputId=function(x){
+            this.table.setAttribute("id","table"+x);
+
+          }
+
+        }
+
+        function StartButton(){
+          this.button=document.createElement("input");
+
+          this.button.setAttribute("type","button");
+          this.button.setAttribute("value","Start");
+
+          this.addButtonToBody=function(){
+          document.body.appendChild(this.button);
+          }
+
+          this.setInputId=function(x){
+
+            this.button.setAttribute("id","start"+x);
+
+          }
+
+        }
+
+        function Counter(){
+          this.inputElement = document.createElement("input");
+          this.inputElement.setAttribute("value",0);
+
+
+          this.insert = function(){
+            document.body.appendChild(this.inputElement);
+          }
+
+          this.increment = function(){
+            //console.log(this.inputElement);
+            this.inputElement.setAttribute("value", (parseInt(this.inputElement.getAttribute("value"))+1));
+          }
+
+          this.setInputId = function(id){
+            this.inputElement.setAttribute("id","counter"+id);
+          }
+
+          this.alertAndReset=function(){
+            //alert("Sie haben "+variableValue.value+" mal getroffen!");
+            this.inputElement.value=0;
+          }
+
+          this.resetCounter=function(){
+            this.inputElement.setAttribute("value", 0);
+          }
+        }
+
+        function setRandomX(zeilen,spalten){
+            this.xButton=document.createElement("input");
+            //this.xButton.setAttribute("id","xbutton");
+            this.xButton.setAttribute("type","button");
+            this.xButton.setAttribute("value","X");
+            //document.getElementById("td1.2").appendChild(this.xButton);
+            //console.log(this.xbutton);
+            //return this.xbutton;
+
+            this.xJumps = function(zeilen,spalten,x){
+              var rand1 = parseInt((Math.random()*zeilen)+1);
+              var rand2 = parseInt((Math.random()*spalten)+1);
+              document.getElementById("td"+rand1+"."+rand2+"-"+x).appendChild(this.xButton);
+              return "test";
+            }
+
+            this.setInputId = function(id){
+              this.xButton.setAttribute("id","button"+id);
+            }
+
+        }
+
+
+        function formsubmit(){
+        //  try{
+          var zeilen= document.getElementById("zeilen").value;
+          console.log("Zeilen: " +zeilen);
+          var spalten= document.getElementById("spalten").value;
+          console.log("Spalten: " +spalten);
+          var intervall= document.getElementById("intervall").value;
+          console.log("intervall: " +intervall);
+          var dauer= document.getElementById("dauer").value;
+          console.log("dauer: " +dauer);
+          var spiele= document.getElementById("spiele").value;
+          console.log("spiele: " +spiele);
+          var numberOfButtons= document.getElementById("buttons").value;
+          console.log("numberOfButtons: " +numberOfButtons);
+
+
+          if((parseInt(intervall)/1000 >=parseInt(dauer))){
+
+          var intervallError =new Error();
+          intervallError.message="Der intervall ist zu lang (länger als die dauer des spiels!).";
+          throw intervallError;
+          }
+
+          else if(zeilen=="" | spalten=="" |intervall=="" |dauer==""| spiele==""){
+
+            var nichtAlleFelder = new Error();
+            nichtAlleFelder.message="Es müssen alle Felder Ausgefüllt sein!";
+            throw nichtAlleFelder;
+          }
+
+          else  if(isNaN(zeilen)===true | isNaN(spalten)===true |isNaN(intervall)===true |isNaN(dauer)===true| isNaN(spiele)===true){
+
+              var eingabeIstKeineZahl = new Error();
+              eingabeIstKeineZahl.message="Es dürfen nur Zahlen eingegeben werden!";
+              throw eingabeIstKeineZahl;
+
+          }
+          else{
+            var buttonArray  = [];
+            var counterArray = [];
+
+            for(var x=0;x<spiele;x++){
+              buttonArray[x]=[];
+              counterArray[x]=[];
+            }
+
+            for(var gennerateAnzahlderSpiele=0; gennerateAnzahlderSpiele<spiele; gennerateAnzahlderSpiele++){
+            var table = new TableGen(zeilen,spalten,gennerateAnzahlderSpiele);
+            table.setInputId(gennerateAnzahlderSpiele);
+            table.addTable();
+            var button =new StartButton();
+            button.setInputId(gennerateAnzahlderSpiele);
+            button.addButtonToBody();
+
+            //console.log("gennerateAnzahlderSpiele: "+gennerateAnzahlderSpiele);
+            for(var buttoncounter=0; buttoncounter<numberOfButtons; buttoncounter++){
+              console.log("gennerateAnzahlderSpiele: "+gennerateAnzahlderSpiele);
+              console.log("buttoncounter: "+buttoncounter);
+              console.log(buttonArray);
+                buttonArray[gennerateAnzahlderSpiele][buttoncounter] = new setRandomX(zeilen,spalten);
+                buttonArray[gennerateAnzahlderSpiele][buttoncounter].setInputId(buttoncounter+""+gennerateAnzahlderSpiele);
+                buttonArray[gennerateAnzahlderSpiele][buttoncounter].xJumps(zeilen,spalten,gennerateAnzahlderSpiele);
+
+                counterArray[gennerateAnzahlderSpiele][buttoncounter] = new Counter();
+                counterArray[gennerateAnzahlderSpiele][buttoncounter].setInputId(buttoncounter+""+gennerateAnzahlderSpiele);
+                counterArray[gennerateAnzahlderSpiele][buttoncounter].insert();
+                //add eventlistener for all x buttons
+                console.log(document.getElementById("button"+buttoncounter+""+gennerateAnzahlderSpiele));
+                document.getElementById("button"+buttoncounter+""+gennerateAnzahlderSpiele).addEventListener("click", function(e){var str = e.currentTarget.id.substr(6); counterArray[str.slice(-numberOfButtons.length)][str.substring(0, str.length - numberOfButtons.length)].increment();});
+            }
+          //  console.log(buttonArray);
+          //  console.log(counterArray);
+
+            document.getElementById("start"+gennerateAnzahlderSpiele).addEventListener("click", function(e){
+                                                                            console.log("start pressed, resetting counter...");
+                                                                            var str=e.currentTarget.id.substr(5);
+                                                                            for(var loop=numberOfButtons; loop>0; loop--){
+                                                                              console.log(loop);
+                                                                              counterArray[str.slice(-1)][loop-1].resetCounter();
+                                                                            }
+
+                                                                            var mainIntervall = setInterval(function(){
+                                                                                                              for(var counter=numberOfButtons; counter>0; counter--){
+                                                                                                              //  console.log("testinloop");
+                                                                                                                buttonArray[str.slice(-numberOfButtons.length)][parseInt(counter)-1].xJumps(zeilen,spalten,str.slice(-numberOfButtons.length));
+                                                                                                              }
+                                                                                                            }, parseInt(intervall));
+                                                                                                          console.log("mainIntervall: "+mainIntervall);
+                                                                          setTimeout(function(){clearInterval(mainIntervall)}, (parseInt(dauer)*1000));
+
+                                                                        });
+          }
+          }
+        //  }
+  //        catch(e){
+    //      window.alert(e);
+      //    }
+        }
+          window.addEventListener("load", function(){var form = document.getElementById("submitbuton"); form.addEventListener("click",function(event){event.preventDefault(); formsubmit();});});
+
+      })();
+
+    </script>
+  </head>
+  <body>
+    <form id="form">
+      Anzahl Zeilen: <br> <input id="zeilen" type="text" value="5">
+      <br>
+      Anzahl Spalten: <br> <input id="spalten" type="text" value="5">
+      <br>
+      Intervall (ms): <br> <input id="intervall" type="text" value="500">
+      <br>
+      Spieldauer (s): <br> <input id="dauer" type="text" value="10">
+      <br>
+      Anzahl Spiele: <br> <input id="spiele" type="text" value="1">
+      <br>
+      Anzahl der Buttons: <br> <input id="buttons" type="text" value="10">
+      <br>
+      <input id="submitbuton" type="submit" value="Los geht's">
+    </form>
+  </body>
+</html>
